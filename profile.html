@@ -1,0 +1,3761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobAssist - Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #1d1d1f;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(0, 113, 227, 0.3);
+            animation: navGlow 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #0071e3;
+            transform: translateY(-2px);
+            text-shadow: 0 0 20px rgba(0, 113, 227, 0.8), 0 0 30px rgba(0, 113, 227, 0.5);
+        }
+
+        @keyframes navGlow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 113, 227, 0.3);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 113, 227, 0.6), 0 0 30px rgba(0, 113, 227, 0.4);
+            }
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #0071e3;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 113, 227, 0.5);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+            box-shadow: 0 0 15px rgba(0, 113, 227, 0.8);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #1d1d1f;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.1), rgba(0, 113, 227, 0.05));
+            border: 1px solid rgba(0, 113, 227, 0.2);
+            box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(0, 113, 227, 0.3);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(0, 113, 227, 0.5), 0 0 40px rgba(0, 113, 227, 0.3);
+            }
+        }
+
+        #userName {
+            font-weight: 600;
+            color: #0071e3;
+            text-shadow: 0 0 10px rgba(0, 113, 227, 0.5);
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            from {
+                text-shadow: 0 0 10px rgba(0, 113, 227, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(0, 113, 227, 0.8), 0 0 30px rgba(0, 113, 227, 0.4);
+            }
+        }
+
+        .logout-btn {
+            background: #f5f5f7;
+            border: 1px solid #d2d2d7;
+            color: #1d1d1f;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #e8e8ed;
+        }
+
+        /* Main Layout */
+        .profile-layout {
+            display: flex;
+            min-height: calc(100vh - 80px);
+            background: #f5f5f7;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            background: #fafbfc;
+            border-right: 1px solid #e8eaed;
+            padding: 1.5rem;
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-card {
+            text-align: center;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0071e3;
+            color: white;
+            border: 3px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .upload-btn:hover {
+            background: #0077ed;
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.6rem;
+        }
+
+        .profile-bio {
+            margin-bottom: 0.8rem;
+        }
+
+        .bio-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #d2d2d7;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            text-align: center;
+            transition: all 0.2s ease;
+            resize: none;
+            min-height: 20px;
+            max-height: 40px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .bio-input:focus {
+            outline: none;
+            border-bottom-color: #0071e3;
+            border-bottom-width: 2px;
+        }
+
+        .bio-input::placeholder {
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        .job-status {
+            margin-bottom: 0.8rem;
+        }
+
+        .job-status-label {
+            font-size: 0.75rem;
+            color: #86868b;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .job-status-select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #d2d2d7;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 400;
+            text-align: center;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: 16px;
+            padding-right: 2rem;
+        }
+
+        .job-status-select:focus {
+            outline: none;
+            border-bottom-color: #0071e3;
+            border-bottom-width: 2px;
+        }
+
+        .job-status-select option {
+            background: #ffffff;
+            color: #1d1d1f;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .job-status-select option:hover {
+            background: #f5f5f7;
+        }
+
+        .save-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.2px;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transform: translateY(-8px);
+            pointer-events: none;
+            box-shadow: 0 1px 3px rgba(0, 113, 227, 0.2);
+        }
+
+        .save-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .save-btn:hover {
+            background: #0077ed;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 113, 227, 0.3);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(0, 113, 227, 0.2);
+        }
+
+        /* Profile Navigation */
+        .profile-nav {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e7;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .nav-section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #86868b;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-button {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #86868b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            position: relative;
+            flex: 1;
+        }
+
+        .nav-button:hover {
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .nav-button.active {
+            background: #0071e3;
+            color: white;
+        }
+
+        .nav-button.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 20px;
+            background: #0071e3;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-button:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-button[onclick*="dashboard"] {
+            background: linear-gradient(45deg, #ff6b35, #ff8e53);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            animation: dashboardGlow 2s ease-in-out infinite alternate;
+        }
+
+        .nav-button[onclick*="dashboard"]:hover {
+            background: linear-gradient(45deg, #ff8e53, #ff6b35);
+            box-shadow: 0 0 25px rgba(255, 107, 53, 0.5);
+            transform: translateY(-1px);
+        }
+
+        @keyframes dashboardGlow {
+            0% {
+                box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(255, 107, 53, 0.6);
+            }
+        }
+
+        .nav-buttons-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+        }
+
+        /* Main Panel */
+        .main-panel {
+            flex: 1;
+            margin-left: 320px;
+            padding: 2rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .content-section {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: #86868b;
+        }
+
+        .content-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Apple-style modular cards */
+        .profile-module {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #e5e5e7;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .profile-module:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .module-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: #f5f5f7;
+        }
+
+        .module-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin: 0;
+        }
+
+        .module-content {
+            color: #1d1d1f;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #86868b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            color: #1d1d1f;
+            font-weight: 500;
+        }
+
+        .info-value.empty {
+            color: #86868b;
+            font-style: italic;
+        }
+
+        .work-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 0.75rem;
+            border-left: 3px solid #0071e3;
+        }
+
+        .work-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .work-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.25rem;
+        }
+
+        .work-company {
+            font-size: 0.9rem;
+            color: #0071e3;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .work-duration {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-bottom: 0.5rem;
+        }
+
+        .work-description {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            line-height: 1.4;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .skill-category-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-list {
+            font-size: 0.85rem;
+            color: #1d1d1f;
+            line-height: 1.4;
+        }
+
+        /* Skills management styles */
+        .skills-input-wrapper {
+            position: relative;
+        }
+        
+        .skills-tags-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            min-height: 40px;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e8eaed;
+        }
+        
+        .skills-tags-display.empty {
+            border: 1px dashed #d2d2d7;
+            background: #ffffff;
+        }
+        
+        .skills-empty-hint {
+            color: #86868b;
+            font-style: italic;
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
+        }
+
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            background: #0071e3;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            gap: 0.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .skill-tag:hover {
+            background: #0077ed;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
+        }
+
+        .skill-tag .skill-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+        
+        .skill-tag .skill-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            background: #1d1d1f;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1000;
+            margin-bottom: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .skill-tag .skill-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #1d1d1f;
+        }
+        
+        .skill-tag:hover .skill-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .skill-tag .remove-skill {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 0.25rem;
+        }
+        
+        .skill-tag .remove-skill:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        .skills-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skills-empty {
+            color: #86868b;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Education entries styles */
+        .education-entry {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0071e3;
+            position: relative;
+        }
+
+        .education-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .education-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.25rem;
+        }
+
+        .education-school {
+            font-size: 0.9rem;
+            color: #0071e3;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .education-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .education-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .education-detail-label {
+            font-size: 0.8rem;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .education-detail-value {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+        }
+
+        .education-description {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+        }
+
+        .education-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .education-action-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #86868b;
+            transition: all 0.2s ease;
+        }
+
+        .education-action-btn:hover {
+            background: rgba(0, 0, 0, 0.2);
+            color: #1d1d1f;
+        }
+
+        .education-empty {
+            text-align: center;
+            color: #86868b;
+            font-style: italic;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #d2d2d7;
+        }
+
+        /* Work experience entries styles */
+        .work-entry {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #0071e3;
+            position: relative;
+        }
+
+        .work-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .work-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .work-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.25rem;
+        }
+
+        .work-company {
+            font-size: 0.9rem;
+            color: #0071e3;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .work-duration {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-bottom: 0.5rem;
+        }
+
+        .work-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .work-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .work-detail-label {
+            font-size: 0.8rem;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .work-detail-value {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+        }
+
+        .work-section {
+            margin-bottom: 1rem;
+        }
+
+        .work-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+
+        .work-section-content {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            line-height: 1.4;
+        }
+
+        .work-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .work-action-btn {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: #86868b;
+            transition: all 0.2s ease;
+        }
+
+        .work-action-btn:hover {
+            background: rgba(0, 0, 0, 0.2);
+            color: #1d1d1f;
+        }
+
+        .work-empty {
+            text-align: center;
+            color: #86868b;
+            font-style: italic;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px dashed #d2d2d7;
+        }
+
+        .documents-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .document-tag {
+            background: #0071e3;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .preferences-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .preference-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .preference-label {
+            font-size: 0.8rem;
+            color: #86868b;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .preference-value {
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        /* Document Styles */
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: #007AFF;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .document-details {
+            flex: 1;
+        }
+
+        .document-name {
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 0.25rem;
+        }
+
+        .document-type {
+            font-size: 0.85rem;
+            color: #86868b;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .document-action-btn {
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border: 1px solid #d2d2d7;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .document-action-btn:hover {
+            background: #e8e8ed;
+            border-color: #007AFF;
+        }
+
+        .document-preview-btn {
+            color: #007AFF;
+        }
+
+        .document-delete-btn {
+            color: #ff3b30;
+        }
+
+        .documents-empty {
+            text-align: center;
+            color: #86868b;
+            font-style: italic;
+            padding: 2rem;
+            background: #f8f9fa;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #34c759;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(52, 199, 89, 0.3);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 350px;
+            font-weight: 500;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            font-size: 1.2rem;
+        }
+
+        .notification-message {
+            flex: 1;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.5rem;
+        }
+
+        .notification-close:hover {
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+        }
+        
+        .form-input:placeholder-shown {
+            color: #86868b;
+        }
+        
+        .form-input:not(:placeholder-shown) {
+            color: #1d1d1f;
+        }
+        
+        /* Show saved value indicator */
+        .form-input[placeholder*="Saved:"] {
+            border-left: 3px solid #34c759;
+            padding-left: calc(1rem - 3px);
+        }
+        
+        .form-input[placeholder*="Saved:"]:focus {
+            border-left-color: #0071e3;
+        }
+        
+        .form-input[placeholder*="Saved:"]::placeholder {
+            color: #34c759;
+            font-weight: 500;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1d1d1f;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+        }
+
+        .save-section-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .save-section-btn:hover {
+            background: #0077ed;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .profile-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+            }
+
+            .main-panel {
+                margin-left: 0;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">JobAssist</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/#about">About</a></li>
+                <li class="user-info">
+                    <span id="userName">User</span>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Profile Layout -->
+    <div class="profile-layout">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="profile-card">
+                <div class="profile-avatar-container">
+                    <div class="profile-avatar" id="profileAvatar">JD</div>
+                    <input type="file" id="photoUpload" accept="image/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('photoUpload').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                
+                <div class="profile-name" id="profileName">User Name</div>
+                
+                <div class="profile-bio">
+                    <textarea class="bio-input" id="bioInput" placeholder="Add Bio" rows="1"></textarea>
+                    <button class="save-btn" id="bioSaveBtn">Save Bio</button>
+                </div>
+                
+                <div class="job-status">
+                    <div class="job-status-label">Looking For</div>
+                    <select class="job-status-select" id="jobStatusSelect">
+                        <option value="internship">Internship</option>
+                        <option value="full-time">Full-time Job</option>
+                        <option value="part-time">Part-time Job</option>
+                        <option value="contract">Contract Work</option>
+                        <option value="not-looking">Not Currently Looking</option>
+                    </select>
+                    <button class="save-btn" id="statusSaveBtn">Save Status</button>
+                </div>
+
+                <!-- Profile Navigation -->
+                <div class="profile-nav">
+                    <div class="nav-section-title">Profile Sections</div>
+                    <div class="nav-buttons-container">
+                        <button class="nav-button active" data-section="my-profile">
+                            <span>👤</span>
+                            MY Profile
+                        </button>
+                        <button class="nav-button" data-section="personal-info">
+                            <span>👤</span>
+                            My Personal Info
+                        </button>
+                        <button class="nav-button" data-section="education">
+                            <span>🎓</span>
+                            Education
+                        </button>
+                        <button class="nav-button" data-section="work-experience">
+                            <span>💼</span>
+                            Work Experience
+                        </button>
+                        <button class="nav-button" data-section="documents">
+                            <span>📄</span>
+                            My Documents
+                        </button>
+                        <button class="nav-button" data-section="skills">
+                            <span>⚡</span>
+                            Skills
+                        </button>
+                        <button class="nav-button" data-section="preferences">
+                            <span>⚙️</span>
+                            Preferences
+                        </button>
+                        <button class="nav-button" onclick="window.location.href='/dashboard'">
+                            <span>📊</span>
+                            Go to Dashboard
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Panel -->
+        <div class="main-panel">
+            <!-- MY Profile Section -->
+            <div class="content-section active" id="my-profile">
+                <div class="section-header">
+                    <h2 class="section-title">MY Profile</h2>
+                    <p class="section-subtitle">Complete overview of your profile information</p>
+                </div>
+                
+                <!-- Personal Info Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">👤</div>
+                        <h3 class="module-title">Personal Information</h3>
+                    </div>
+                    <div class="module-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Full Name</div>
+                                <div class="info-value" id="profile-fullname">Not provided</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Email</div>
+                                <div class="info-value" id="profile-email">Not provided</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Phone</div>
+                                <div class="info-value" id="profile-phone">Not provided</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Location</div>
+                                <div class="info-value" id="profile-location">Not provided</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">🎓</div>
+                        <h3 class="module-title">Education</h3>
+                    </div>
+                    <div class="module-content" id="education-overview">
+                        <p style="color: #86868b; font-style: italic;">No education information added yet</p>
+                    </div>
+                </div>
+
+                <!-- Work Experience Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">💼</div>
+                        <h3 class="module-title">Work Experience</h3>
+                    </div>
+                    <div class="module-content" id="work-overview">
+                        <p style="color: #86868b; font-style: italic;">No work experience added yet</p>
+                    </div>
+                </div>
+
+                <!-- Skills Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">⚡</div>
+                        <h3 class="module-title">Skills</h3>
+                    </div>
+                    <div class="module-content" id="skills-overview">
+                        <p style="color: #86868b; font-style: italic;">No skills added yet</p>
+                    </div>
+                </div>
+
+                <!-- Documents Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">📄</div>
+                        <h3 class="module-title">Documents</h3>
+                    </div>
+                    <div class="module-content" id="documents-overview">
+                        <p style="color: #86868b; font-style: italic;">No documents uploaded yet</p>
+                    </div>
+                </div>
+
+                <!-- Preferences Module -->
+                <div class="profile-module">
+                    <div class="module-header">
+                        <div class="module-icon">⚙️</div>
+                        <h3 class="module-title">Job Preferences</h3>
+                    </div>
+                    <div class="module-content" id="preferences-overview">
+                        <p style="color: #86868b; font-style: italic;">No preferences set yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Info Section -->
+            <div class="content-section" id="personal-info">
+                <div class="section-header">
+                    <h2 class="section-title">Step 1: Contact Information</h2>
+                    <p class="section-subtitle">Your personal details and contact information</p>
+                </div>
+                <div class="content-card">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" id="firstName" name="firstName" autocomplete="given-name" placeholder="First name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" id="lastName" name="lastName" autocomplete="family-name" placeholder="Last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" class="form-input" id="email" name="email" autocomplete="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone *</label>
+                        <input type="tel" class="form-input" id="phone" name="phone" autocomplete="tel" placeholder="+1 (555) 123-4567" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-input" id="address" name="address" autocomplete="street-address" placeholder="Street, City, State, ZIP">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn</label>
+                        <input type="url" class="form-input" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Portfolio</label>
+                        <input type="url" class="form-input" id="portfolio" name="portfolio" placeholder="https://yourportfolio.com">
+                    </div>
+                    <button class="save-section-btn">Save Contact Information</button>
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="content-section" id="education">
+                <div class="section-header">
+                    <h2 class="section-title">Step 3: Education</h2>
+                    <p class="section-subtitle">Your educational background and qualifications</p>
+                </div>
+                
+                <!-- Education Entries Display -->
+                <div id="education-entries" style="margin-bottom: 2rem;">
+                    <!-- Education entries will be displayed here -->
+                </div>
+                
+                <!-- Add New Education Form -->
+                <div class="content-card" id="education-form">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 1.5rem;">Add Education</h3>
+                    <div class="form-group">
+                        <label class="form-label">School/University</label>
+                        <input type="text" class="form-input" id="edu-school" placeholder="University Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Degree</label>
+                        <select class="form-input" id="edu-degree">
+                            <option value="">Select Degree</option>
+                            <option value="High School Diploma">High School Diploma</option>
+                            <option value="Associate's Degree">Associate's Degree</option>
+                            <option value="Bachelor's Degree">Bachelor's Degree</option>
+                            <option value="Master's Degree">Master's Degree</option>
+                            <option value="Doctorate (PhD)">Doctorate (PhD)</option>
+                            <option value="Professional Degree">Professional Degree</option>
+                            <option value="Certificate">Certificate</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Field of Study</label>
+                        <select class="form-input" id="edu-field">
+                            <option value="">Select Field of Study</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Software Engineering">Software Engineering</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Cybersecurity">Cybersecurity</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Economics">Economics</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Medicine">Medicine</option>
+                            <option value="Nursing">Nursing</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Education">Education</option>
+                            <option value="Law">Law</option>
+                            <option value="Journalism">Journalism</option>
+                            <option value="Communications">Communications</option>
+                            <option value="Graphic Design">Graphic Design</option>
+                            <option value="Fine Arts">Fine Arts</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Environmental Science">Environmental Science</option>
+                            <option value="Political Science">Political Science</option>
+                            <option value="International Relations">International Relations</option>
+                            <option value="History">History</option>
+                            <option value="Literature">Literature</option>
+                            <option value="Languages">Languages</option>
+                            <option value="Philosophy">Philosophy</option>
+                            <option value="Sociology">Sociology</option>
+                            <option value="Anthropology">Anthropology</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-input" id="edu-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Graduation Date</label>
+                            <input type="date" class="form-input" id="edu-end-date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">GPA (Optional)</label>
+                        <input type="text" class="form-input" id="edu-gpa" placeholder="3.8/4.0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-input" id="edu-location" placeholder="City, State">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description (Optional)</label>
+                        <textarea class="form-textarea" id="edu-description" placeholder="Relevant coursework, achievements, etc." rows="3"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="save-section-btn" id="save-education-btn">Save Education</button>
+                        <button type="button" class="save-section-btn" id="add-another-education-btn" style="background: #86868b; display: none;">Add Another Education</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Work Experience Section -->
+            <div class="content-section" id="work-experience">
+                <div class="section-header">
+                    <h2 class="section-title">Step 2: Work Experience & Skills</h2>
+                    <p class="section-subtitle">Your professional work history</p>
+                </div>
+                
+                <!-- Work Experience Entries Display -->
+                <div id="work-entries" style="margin-bottom: 2rem;">
+                    <!-- Work experience entries will be displayed here -->
+                </div>
+                
+                <!-- Add New Work Experience Form -->
+                <div class="content-card" id="work-form">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 1.5rem;">Add Work Experience</h3>
+                    <div class="form-group">
+                        <label class="form-label">Job Title</label>
+                        <input type="text" class="form-input" id="work-title" placeholder="Software Engineer, Marketing Manager, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-input" id="work-company" placeholder="Company Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Employment Type</label>
+                        <select class="form-input" id="work-type">
+                            <option value="">Select Employment Type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Temporary">Temporary</option>
+                            <option value="Volunteer">Volunteer</option>
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-input" id="work-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">End Date</label>
+                            <input type="date" class="form-input" id="work-end-date">
+                            <small style="color: #86868b; font-size: 0.8rem;">Leave empty if currently working</small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-input" id="work-location" placeholder="City, State or Remote">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Key Responsibilities</label>
+                        <textarea class="form-textarea" id="work-responsibilities" placeholder="List your main responsibilities and duties" rows="3"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="save-section-btn" id="save-work-btn">Save Work Experience</button>
+                        <button type="button" class="save-section-btn" id="add-another-work-btn" style="background: #86868b; display: none;">Add Another Experience</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Section -->
+            <div class="content-section" id="documents">
+                <div class="section-header">
+                    <h2 class="section-title">My Documents</h2>
+                    <p class="section-subtitle">Your resume, certificates, and other documents</p>
+                </div>
+                
+                <!-- Uploaded Documents Display -->
+                <div id="documents-list" style="margin-bottom: 2rem;">
+                    <!-- Documents will be displayed here -->
+                </div>
+                
+                <!-- Upload Documents Form -->
+                <div class="content-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 1.5rem;">Upload Documents</h3>
+                    <div class="form-group">
+                        <label class="form-label">Resume *</label>
+                        <input type="file" class="form-input" id="resumeFile" name="resumeFile" accept=".pdf,.doc,.docx" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cover Letter</label>
+                        <input type="file" class="form-input" id="coverLetterFile" name="coverLetterFile" accept=".pdf,.doc,.docx">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Certificates</label>
+                        <input type="file" class="form-input" id="certificates-upload" accept=".pdf,.jpg,.png" multiple>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Other Documents</label>
+                        <input type="file" class="form-input" id="other-docs-upload" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                    </div>
+                    <button class="save-section-btn" id="upload-documents-btn">Upload Documents</button>
+                </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="content-section" id="skills">
+                <div class="section-header">
+                    <h2 class="section-title">Step 2: Work Experience & Skills</h2>
+                    <p class="section-subtitle">Add your skills one by one or separated by commas</p>
+                </div>
+                <div class="content-card">
+                    <div class="form-group">
+                        <label class="form-label">Add Skills *</label>
+                        <div class="skills-input-wrapper">
+                            <!-- Skills tags display above input -->
+                            <div id="skills-tags-display" class="skills-tags-display empty">
+                                <span class="skills-empty-hint">Your skills will appear here...</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+                                <input 
+                                    type="text" 
+                                    class="form-input" 
+                                    id="skills-input" 
+                                    name="skills-input" 
+                                    placeholder="Enter skills separated by commas (e.g., JavaScript, Python, Leadership)" 
+                                    style="flex: 1;"
+                                />
+                                <button 
+                                    type="button" 
+                                    class="save-section-btn" 
+                                    id="add-skills-btn"
+                                    style="padding: 0.75rem 1.5rem; margin: 0; white-space: nowrap;"
+                                >
+                                    Add Skills
+                                </button>
+                            </div>
+                            <small style="color: #86868b; font-size: 0.8rem; margin-top: 0.5rem; display: block;">
+                                💡 Enter multiple skills separated by commas and click "Add Skills". You can add skills one by one or in batches.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Section -->
+            <div class="content-section" id="preferences">
+                <div class="section-header">
+                    <h2 class="section-title">Step 4: My Information</h2>
+                    <p class="section-subtitle">Your job preferences, work authorization, and demographic information</p>
+                </div>
+                
+                <!-- Work Authorization & Preferences -->
+                <div class="content-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 1.5rem;">Work Authorization & Preferences</h3>
+                    <div class="form-group">
+                        <label class="form-label">Work Authorization *</label>
+                        <select class="form-input" id="workAuthorization" name="workAuthorization" required>
+                            <option value="">Select an option</option>
+                            <option value="us-citizen">US Citizen</option>
+                            <option value="green-card">Green Card</option>
+                            <option value="h1b">H1B</option>
+                            <option value="opt">OPT</option>
+                            <option value="cpt">CPT</option>
+                            <option value="require-sponsorship">Require Sponsorship</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Locations</label>
+                        <input type="text" class="form-input" id="preferredLocations" name="preferredLocations" placeholder="e.g., New York, San Francisco, Remote">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Work Type Preference *</label>
+                        <select class="form-input" id="workTypePreference" name="workTypePreference" required>
+                            <option value="">Select an option</option>
+                            <option value="remote">Remote</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="onsite">Onsite</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Willingness to Relocate</label>
+                        <select class="form-input" id="willingnessToRelocate" name="willingnessToRelocate">
+                            <option value="">Select an option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="maybe">Maybe</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Availability Date</label>
+                        <input type="text" class="form-input date-full-input" id="availabilityDate" name="availabilityDate" autocomplete="off" placeholder="MM/DD/YYYY or YYYY-MM-DD" data-saved="">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Expected Salary</label>
+                        <input type="text" class="form-input" id="expectedSalary" name="expectedSalary" placeholder="e.g., $80,000 - $100,000" data-saved="">
+                    </div>
+                    <button class="save-section-btn" id="save-my-info-btn">Save My Information</button>
+                </div>
+
+                <!-- EEO Information -->
+                <div class="content-card">
+                    <h3 style="font-size: 1.1rem; font-weight: 600; color: #1d1d1f; margin-bottom: 1.5rem;">Step 5: Equal Employment Opportunity (EEO)</h3>
+                    <p style="color: #86868b; font-size: 0.9rem; margin-bottom: 1.5rem;">All EEO fields are optional and will default to "Prefer not to say" if left empty.</p>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select class="form-input" id="gender" name="gender">
+                            <option value="">Prefer not to say</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Race/Ethnicity</label>
+                        <select class="form-input" id="raceEthnicity" name="raceEthnicity">
+                            <option value="">Prefer not to say</option>
+                            <option value="hispanic-latino">Hispanic/Latino</option>
+                            <option value="white">White</option>
+                            <option value="black">Black or African American</option>
+                            <option value="asian">Asian</option>
+                            <option value="native-american">American Indian or Alaska Native</option>
+                            <option value="pacific-islander">Native Hawaiian or Pacific Islander</option>
+                            <option value="two-or-more">Two or More Races</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Veteran Status</label>
+                        <select class="form-input" id="veteranStatus" name="veteranStatus">
+                            <option value="">Prefer not to say</option>
+                            <option value="not-veteran">Not a veteran</option>
+                            <option value="veteran">Veteran</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Disability Status</label>
+                        <select class="form-input" id="disabilityStatus" name="disabilityStatus">
+                            <option value="">Prefer not to say</option>
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+                    <button class="save-section-btn" id="save-eeo-btn">Save EEO Information</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYVuvCWFOaO3MI9_TTNBskhqbtRD6EgUM",
+            authDomain: "rnglab3303.firebaseapp.com",
+            projectId: "rnglab3303",
+            storageBucket: "rnglab3303.firebasestorage.app",
+            messagingSenderId: "730937569987",
+            appId: "1:730937569987:web:c5e25cfb2fa4e7693be876",
+            measurementId: "G-7P392DM3L8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = '/auth';
+                return;
+            }
+
+            // Set temporary userName, will be updated after loading profile data
+            const userNameEl = document.getElementById('userName');
+            if (userNameEl) {
+                userNameEl.textContent = user.displayName || user.email;
+            }
+            await loadUserProfile(user);
+        });
+
+        async function loadUserProfile(user) {
+            try {
+                console.log('Loading profile for user:', user.uid);
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                console.log('User document exists:', userDoc.exists());
+                if (userDoc.exists()) {
+                    userData = userDoc.data(); // Use global variable
+                    
+                    // Update profile name
+                    console.log('User data from Firebase:', userData);
+                    console.log('userData.name:', userData.name);
+                    console.log('user.displayName:', user.displayName);
+                    console.log('user.email:', user.email);
+                    
+                    // Get the name from Firebase document - prioritize contactInfo.firstName + lastName
+                    let profileName = '';
+                    
+                    // Try to get firstName and lastName from contactInfo
+                    if (userData.contactInfo?.firstName && userData.contactInfo?.lastName) {
+                        profileName = `${userData.contactInfo.firstName} ${userData.contactInfo.lastName}`.trim();
+                        console.log('Using contactInfo.firstName + lastName:', profileName);
+                    } else if (userData.contactInfo?.firstName) {
+                        profileName = userData.contactInfo.firstName;
+                        console.log('Using contactInfo.firstName only:', profileName);
+                    } else if (userData.contactInfo?.lastName) {
+                        profileName = userData.contactInfo.lastName;
+                        console.log('Using contactInfo.lastName only:', profileName);
+                    }
+                    
+                    // Fallback to other name fields if contactInfo not available
+                    if (!profileName) {
+                        profileName = userData.name;
+                        console.log('Using userData.name:', profileName);
+                    }
+                    if (!profileName) {
+                        profileName = userData.fullName;
+                        console.log('Using userData.fullName:', profileName);
+                    }
+                    if (!profileName && userData.personalInfo?.fullName) {
+                        profileName = userData.personalInfo.fullName;
+                        console.log('Using personalInfo.fullName:', profileName);
+                    }
+                    if (!profileName) {
+                        profileName = user.displayName;
+                        console.log('Using user.displayName:', profileName);
+                    }
+                    if (!profileName) {
+                        profileName = user.email;
+                        console.log('Using user.email as fallback:', profileName);
+                    }
+                    
+                    console.log('Final profile name:', profileName);
+                    const profileNameEl = document.getElementById('profileName');
+                    if (profileNameEl) {
+                        profileNameEl.textContent = profileName;
+                    }
+                    
+                    // Also update the userName in the navigation
+                    const userNameEl = document.getElementById('userName');
+                    if (userNameEl) {
+                        userNameEl.textContent = profileName;
+                        console.log('Updated userName with:', profileName);
+                    }
+                    
+                    // Also update the avatar initials with the correct name
+                    const profileAvatar = document.getElementById('profileAvatar');
+                    if (profileAvatar) {
+                        if (userData.profilePhoto) {
+                            profileAvatar.innerHTML = `<img src="${userData.profilePhoto}" alt="Profile">`;
+                        } else {
+                            const initials = getInitials(profileName);
+                            profileAvatar.textContent = initials;
+                        }
+                    }
+                    
+                    // Force update the profile name if it's still showing email
+                    if (profileName === user.email) {
+                        console.log('Profile name is still email, trying to get name from contactInfo');
+                        // Try to get from contactInfo first
+                        if (userData.contactInfo?.firstName && userData.contactInfo?.lastName) {
+                            profileName = `${userData.contactInfo.firstName} ${userData.contactInfo.lastName}`.trim();
+                            document.getElementById('profileName').textContent = profileName;
+                            document.getElementById('userName').textContent = profileName;
+                            console.log('Updated profile name from contactInfo:', profileName);
+                        } else if (userData.contactInfo?.firstName) {
+                            profileName = userData.contactInfo.firstName;
+                            document.getElementById('profileName').textContent = profileName;
+                            document.getElementById('userName').textContent = profileName;
+                            console.log('Updated profile name from contactInfo.firstName:', profileName);
+                        } else if (userData.personalInfo && userData.personalInfo.fullName) {
+                            profileName = userData.personalInfo.fullName;
+                            document.getElementById('profileName').textContent = profileName;
+                            document.getElementById('userName').textContent = profileName;
+                            console.log('Updated profile name from personalInfo:', profileName);
+                        } else {
+                            console.log('No name found in contactInfo or personalInfo');
+                        }
+                    }
+                    
+                    // Update bio
+                    if (userData.bio) {
+                        const bioInput = document.getElementById('bioInput');
+                        if (bioInput) {
+                            bioInput.value = userData.bio;
+                        }
+                    }
+                    
+                    // Update job status
+                    if (userData.jobStatus) {
+                        const jobStatusSelect = document.getElementById('jobStatusSelect');
+                        if (jobStatusSelect) {
+                            jobStatusSelect.value = userData.jobStatus;
+                        }
+                    }
+
+                    // Load education data
+                    if (userData.education) {
+                        educationEntries = userData.education;
+                        updateEducationDisplay();
+                    }
+
+                    // Load work experience data
+                    if (userData.workExperience) {
+                        workEntries = userData.workExperience;
+                        updateWorkDisplay();
+                    }
+
+                    // Load skills data
+                    if (userData.skills) {
+                        userSkills = Array.isArray(userData.skills) ? userData.skills : [];
+                        
+                        // Update the skills tags display after a short delay to ensure DOM is ready
+                        setTimeout(() => {
+                            if (typeof updateSkillsTagsDisplay === 'function') {
+                                updateSkillsTagsDisplay();
+                            }
+                        }, 100);
+                        
+                        updateSkillsDisplay();
+                    }
+
+                    // Load documents data
+                    if (userData.documents) {
+                        userDocuments = userData.documents;
+                        updateDocumentsDisplay();
+                    }
+
+                    // Load personal info data
+                    if (userData.personalInfo) {
+                        const personalInfo = userData.personalInfo;
+                        const personalInputs = document.querySelectorAll('#personal-info input');
+                        if (personalInputs[0]) personalInputs[0].value = personalInfo.fullName || '';
+                        if (personalInputs[1]) personalInputs[1].value = personalInfo.email || user.email || '';
+                        if (personalInputs[2]) personalInputs[2].value = personalInfo.phone || '';
+                        if (personalInputs[3]) personalInputs[3].value = personalInfo.location || '';
+                    }
+
+                    // Load preferences data - Step 4: My Information
+                    if (userData.myInformation) {
+                        const myInfo = userData.myInformation;
+                        const workAuthEl = document.getElementById('workAuthorization');
+                        if (workAuthEl && myInfo.workAuthorization) {
+                            workAuthEl.value = myInfo.workAuthorization;
+                        }
+                        const preferredLocationsEl = document.getElementById('preferredLocations');
+                        if (preferredLocationsEl) {
+                            if (myInfo.preferredLocations) {
+                                preferredLocationsEl.value = myInfo.preferredLocations;
+                                preferredLocationsEl.placeholder = `Saved: ${myInfo.preferredLocations}`;
+                                preferredLocationsEl.setAttribute('data-saved', myInfo.preferredLocations);
+                            } else {
+                                preferredLocationsEl.placeholder = 'e.g., New York, San Francisco, Remote';
+                                preferredLocationsEl.removeAttribute('data-saved');
+                            }
+                        }
+                        const workTypePreferenceEl = document.getElementById('workTypePreference');
+                        if (workTypePreferenceEl && myInfo.workTypePreference) {
+                            workTypePreferenceEl.value = myInfo.workTypePreference;
+                        }
+                        const willingnessToRelocateEl = document.getElementById('willingnessToRelocate');
+                        if (willingnessToRelocateEl && myInfo.willingnessToRelocate) {
+                            willingnessToRelocateEl.value = myInfo.willingnessToRelocate;
+                        }
+                        const availabilityDateEl = document.getElementById('availabilityDate');
+                        if (availabilityDateEl) {
+                            if (myInfo.availabilityDate) {
+                                availabilityDateEl.value = myInfo.availabilityDate;
+                                availabilityDateEl.placeholder = `Saved: ${myInfo.availabilityDate}`;
+                                availabilityDateEl.setAttribute('data-saved', myInfo.availabilityDate);
+                            } else {
+                                availabilityDateEl.placeholder = 'MM/DD/YYYY or YYYY-MM-DD';
+                                availabilityDateEl.removeAttribute('data-saved');
+                            }
+                        }
+                        const expectedSalaryEl = document.getElementById('expectedSalary');
+                        if (expectedSalaryEl) {
+                            if (myInfo.expectedSalary) {
+                                expectedSalaryEl.value = myInfo.expectedSalary;
+                                expectedSalaryEl.placeholder = `Saved: ${myInfo.expectedSalary}`;
+                                expectedSalaryEl.setAttribute('data-saved', myInfo.expectedSalary);
+                            } else {
+                                expectedSalaryEl.placeholder = 'e.g., $80,000 - $100,000';
+                                expectedSalaryEl.removeAttribute('data-saved');
+                            }
+                        }
+                    }
+                    
+                    // Load preferences data - Step 5: EEO Information
+                    if (userData.eeoInfo) {
+                        const eeoInfo = userData.eeoInfo;
+                        const genderEl = document.getElementById('gender');
+                        if (genderEl && eeoInfo.gender) {
+                            genderEl.value = eeoInfo.gender;
+                        }
+                        const raceEthnicityEl = document.getElementById('raceEthnicity');
+                        if (raceEthnicityEl && eeoInfo.raceEthnicity) {
+                            raceEthnicityEl.value = eeoInfo.raceEthnicity;
+                        }
+                        const veteranStatusEl = document.getElementById('veteranStatus');
+                        if (veteranStatusEl && eeoInfo.veteranStatus) {
+                            veteranStatusEl.value = eeoInfo.veteranStatus;
+                        }
+                        const disabilityStatusEl = document.getElementById('disabilityStatus');
+                        if (disabilityStatusEl && eeoInfo.disabilityStatus) {
+                            disabilityStatusEl.value = eeoInfo.disabilityStatus;
+                        }
+                    }
+                    
+                    // Also check old preferences structure for backward compatibility
+                    if (userData.preferences && !userData.myInformation) {
+                        const prefs = userData.preferences;
+                        const workAuthEl = document.getElementById('workAuthorization');
+                        if (workAuthEl && prefs.workAuth) {
+                            workAuthEl.value = prefs.workAuth;
+                        }
+                        const preferredLocationsEl = document.getElementById('preferredLocations');
+                        if (preferredLocationsEl) {
+                            if (prefs.locationPreference) {
+                                preferredLocationsEl.value = prefs.locationPreference;
+                                preferredLocationsEl.placeholder = `Saved: ${prefs.locationPreference}`;
+                                preferredLocationsEl.setAttribute('data-saved', prefs.locationPreference);
+                            } else {
+                                preferredLocationsEl.placeholder = 'e.g., New York, San Francisco, Remote';
+                                preferredLocationsEl.removeAttribute('data-saved');
+                            }
+                        }
+                        const workTypePreferenceEl = document.getElementById('workTypePreference');
+                        if (workTypePreferenceEl && prefs.workArrangement) {
+                            workTypePreferenceEl.value = prefs.workArrangement;
+                        }
+                        const willingnessToRelocateEl = document.getElementById('willingnessToRelocate');
+                        if (willingnessToRelocateEl && prefs.relocation) {
+                            willingnessToRelocateEl.value = prefs.relocation;
+                        }
+                        const availabilityDateEl = document.getElementById('availabilityDate');
+                        if (availabilityDateEl) {
+                            if (prefs.startDate) {
+                                availabilityDateEl.value = prefs.startDate;
+                                availabilityDateEl.placeholder = `Saved: ${prefs.startDate}`;
+                                availabilityDateEl.setAttribute('data-saved', prefs.startDate);
+                            } else {
+                                availabilityDateEl.placeholder = 'MM/DD/YYYY or YYYY-MM-DD';
+                                availabilityDateEl.removeAttribute('data-saved');
+                            }
+                        }
+                        const expectedSalaryEl = document.getElementById('expectedSalary');
+                        if (expectedSalaryEl) {
+                            if (prefs.salaryExpectation) {
+                                expectedSalaryEl.value = prefs.salaryExpectation;
+                                expectedSalaryEl.placeholder = `Saved: ${prefs.salaryExpectation}`;
+                                expectedSalaryEl.setAttribute('data-saved', prefs.salaryExpectation);
+                            } else {
+                                expectedSalaryEl.placeholder = 'e.g., $80,000 - $100,000';
+                                expectedSalaryEl.removeAttribute('data-saved');
+                            }
+                        }
+                        const genderEl = document.getElementById('gender');
+                        if (genderEl && prefs.gender) {
+                            genderEl.value = prefs.gender;
+                        }
+                        const raceEthnicityEl = document.getElementById('raceEthnicity');
+                        if (raceEthnicityEl && prefs.race) {
+                            raceEthnicityEl.value = prefs.race;
+                        }
+                        const veteranStatusEl = document.getElementById('veteranStatus');
+                        if (veteranStatusEl && prefs.veteranStatus) {
+                            veteranStatusEl.value = prefs.veteranStatus;
+                        }
+                        const disabilityStatusEl = document.getElementById('disabilityStatus');
+                        if (disabilityStatusEl && prefs.disabilityStatus) {
+                            disabilityStatusEl.value = prefs.disabilityStatus;
+                        }
+                    }
+
+                } else {
+                    // Set default values - document doesn't exist
+                    console.log('User document does not exist, using fallback values');
+                    const fallbackName = user.displayName || user.email;
+                    const profileNameEl = document.getElementById('profileName');
+                    if (profileNameEl) {
+                        profileNameEl.textContent = fallbackName;
+                    }
+                    const userNameEl = document.getElementById('userName');
+                    if (userNameEl) {
+                        userNameEl.textContent = fallbackName;
+                    }
+                    const initials = getInitials(fallbackName);
+                    const profileAvatarEl = document.getElementById('profileAvatar');
+                    if (profileAvatarEl) {
+                        profileAvatarEl.textContent = initials;
+                    }
+                    
+                    // Create a basic user document if it doesn't exist
+                    try {
+                        await setDoc(doc(db, 'users', user.uid), {
+                            uid: user.uid,
+                            email: user.email,
+                            name: user.displayName || user.email,
+                            createdAt: new Date().toISOString(),
+                            profile: null
+                        });
+                        console.log('Created missing user document');
+                    } catch (error) {
+                        console.error('Error creating user document:', error);
+                    }
+                }
+                
+                // Prefill email in Personal Info section
+                const personalEmailField = document.getElementById('personal-email');
+                if (personalEmailField && user.email) {
+                    personalEmailField.value = user.email;
+                }
+
+                // Update overview with loaded data
+                updateProfileOverview();
+                
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+            }
+        }
+
+        function getInitials(displayName) {
+            if (displayName) {
+                // If it's an email, use the part before @
+                if (displayName.includes('@')) {
+                    const emailPart = displayName.split('@')[0];
+                    return emailPart.charAt(0).toUpperCase();
+                }
+                
+                const names = displayName.split(' ');
+                if (names.length >= 2) {
+                    return `${names[0].charAt(0)}${names[names.length - 1].charAt(0)}`.toUpperCase();
+                } else {
+                    return names[0].charAt(0).toUpperCase();
+                }
+            }
+            return 'U';
+        }
+
+        async function logout() {
+            try {
+                await signOut(auth);
+                window.location.href = '/auth';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                window.location.href = '/auth';
+            }
+        }
+
+        // Photo upload functionality
+        const photoUpload = document.getElementById('photoUpload');
+        if (photoUpload) {
+            photoUpload.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    const user = auth.currentUser;
+                    const profileAvatar = document.getElementById('profileAvatar');
+                    
+                    // Show loading state
+                    profileAvatar.innerHTML = '<div style="font-size: 0.8rem;">⏳</div>';
+                    
+                    // Upload to Firebase Storage
+                    const storageRef = ref(storage, `profile-photos/${user.uid}/${file.name}`);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(snapshot.ref);
+                    
+                    // Save URL to Firestore
+                    await setDoc(doc(db, 'users', user.uid), {
+                        profilePhoto: downloadURL
+                    }, { merge: true });
+                    
+                    // Update avatar display
+                    profileAvatar.innerHTML = `<img src="${downloadURL}" alt="Profile">`;
+                    
+                } catch (error) {
+                    console.error('Error uploading photo:', error);
+                    // Reset to initials on error
+                    const initials = getInitials(user.displayName);
+                    document.getElementById('profileAvatar').textContent = initials;
+                }
+            }
+        });
+        }
+
+        // Save bio data
+        async function saveBio() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                const bioInput = document.getElementById('bioInput');
+                if (!bioInput) return;
+                const bio = bioInput.value || '';
+
+                await setDoc(doc(db, 'users', user.uid), {
+                    bio: bio
+                }, { merge: true });
+
+                // Hide save button
+                const bioSaveBtn = document.getElementById('bioSaveBtn');
+                if (bioSaveBtn) {
+                    bioSaveBtn.classList.remove('show');
+
+                    // Show success feedback
+                    const originalText = bioSaveBtn.textContent;
+                    bioSaveBtn.textContent = 'Saved!';
+                    bioSaveBtn.style.background = '#34c759';
+                    
+                    setTimeout(() => {
+                        bioSaveBtn.textContent = originalText;
+                        bioSaveBtn.style.background = '#0071e3';
+                    }, 2000);
+                }
+                
+                // Show notification
+                showNotification('Bio updated successfully!');
+
+            } catch (error) {
+                console.error('Error saving bio:', error);
+            }
+        }
+
+        // Save job status data
+        async function saveJobStatus() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                const jobStatusSelect = document.getElementById('jobStatusSelect');
+                if (!jobStatusSelect) return;
+                const jobStatus = jobStatusSelect.value || '';
+
+                await setDoc(doc(db, 'users', user.uid), {
+                    jobStatus: jobStatus
+                }, { merge: true });
+
+                // Hide save button
+                const statusSaveBtn = document.getElementById('statusSaveBtn');
+                if (statusSaveBtn) {
+                    statusSaveBtn.classList.remove('show');
+
+                    // Show success feedback
+                    const originalText = statusSaveBtn.textContent;
+                    statusSaveBtn.textContent = 'Saved!';
+                    statusSaveBtn.style.background = '#34c759';
+                    
+                    setTimeout(() => {
+                        statusSaveBtn.textContent = originalText;
+                        statusSaveBtn.style.background = '#0071e3';
+                    }, 2000);
+                }
+                
+                // Show notification
+                showNotification('Job status updated successfully!');
+
+            } catch (error) {
+                console.error('Error saving job status:', error);
+            }
+        }
+
+        // Show save button when user starts editing
+        function showSaveButton(buttonId) {
+            const button = document.getElementById(buttonId);
+            if (button) {
+                button.classList.add('show');
+            }
+        }
+
+        // Event listeners with null checks
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+        
+        const bioSaveBtn = document.getElementById('bioSaveBtn');
+        if (bioSaveBtn) {
+            bioSaveBtn.addEventListener('click', saveBio);
+        }
+        
+        const statusSaveBtn = document.getElementById('statusSaveBtn');
+        if (statusSaveBtn) {
+            statusSaveBtn.addEventListener('click', saveJobStatus);
+        }
+        
+        // Show save buttons when user starts editing
+        const bioInput = document.getElementById('bioInput');
+        if (bioInput) {
+            bioInput.addEventListener('input', () => showSaveButton('bioSaveBtn'));
+        }
+        
+        const jobStatusSelect = document.getElementById('jobStatusSelect');
+        if (jobStatusSelect) {
+            jobStatusSelect.addEventListener('change', () => showSaveButton('statusSaveBtn'));
+        }
+
+        // Profile navigation functionality
+        const navButtons = document.querySelectorAll('.nav-button');
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        navButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons and sections
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Show corresponding content section
+                const sectionId = this.getAttribute('data-section');
+                if (sectionId) {
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                }
+                
+                // Update overview when switching to MY Profile
+                if (sectionId === 'my-profile') {
+                    updateProfileOverview();
+                }
+            });
+        });
+
+        // Function to update the profile overview
+        function updateProfileOverview() {
+            // Update personal info - Step 1: Contact Information
+            // Try to get values from form fields first
+            let firstName = document.getElementById('firstName')?.value?.trim() || '';
+            let lastName = document.getElementById('lastName')?.value?.trim() || '';
+            let email = document.getElementById('email')?.value?.trim() || '';
+            let phone = document.getElementById('phone')?.value?.trim() || '';
+            let address = document.getElementById('address')?.value?.trim() || '';
+            let linkedin = document.getElementById('linkedin')?.value?.trim() || '';
+            let portfolio = document.getElementById('portfolio')?.value?.trim() || '';
+            
+            // Also try to get from global userData if available (from Firebase)
+            if (typeof userData !== 'undefined' && userData) {
+                // Use form values if available, otherwise use Firebase data
+                if (!firstName && userData.contactInfo?.firstName) {
+                    firstName = userData.contactInfo.firstName;
+                }
+                if (!lastName && userData.contactInfo?.lastName) {
+                    lastName = userData.contactInfo.lastName;
+                }
+                if (!email && userData.contactInfo?.email) {
+                    email = userData.contactInfo.email;
+                }
+                if (!phone && userData.contactInfo?.phone) {
+                    phone = userData.contactInfo.phone;
+                }
+                if (!address && userData.contactInfo?.address) {
+                    address = userData.contactInfo.address;
+                }
+                if (!linkedin && userData.contactInfo?.linkedin) {
+                    linkedin = userData.contactInfo.linkedin;
+                }
+                if (!portfolio && userData.contactInfo?.portfolio) {
+                    portfolio = userData.contactInfo.portfolio;
+                }
+                
+                // Fallback to old personalInfo structure
+                if (!firstName && !lastName && userData.personalInfo?.fullName) {
+                    const names = userData.personalInfo.fullName.split(' ');
+                    firstName = names[0] || '';
+                    lastName = names.slice(1).join(' ') || '';
+                }
+                if (!email && userData.personalInfo?.email) {
+                    email = userData.personalInfo.email;
+                }
+                if (!phone && userData.personalInfo?.phone) {
+                    phone = userData.personalInfo.phone;
+                }
+                if (!address && userData.personalInfo?.location) {
+                    address = userData.personalInfo.location;
+                }
+            }
+            
+            // Combine firstName and lastName for fullname
+            const fullname = (firstName && lastName) ? `${firstName} ${lastName}`.trim() : (firstName || lastName || 'Not provided');
+            const displayEmail = email || 'Not provided';
+            const displayPhone = phone || 'Not provided';
+            const displayLocation = address || 'Not provided';
+            
+            // Update profile display elements if they exist
+            const profileFullnameEl = document.getElementById('profile-fullname');
+            if (profileFullnameEl) {
+                profileFullnameEl.textContent = fullname;
+                profileFullnameEl.className = fullname === 'Not provided' ? 'info-value empty' : 'info-value';
+            }
+            
+            const profileEmailEl = document.getElementById('profile-email');
+            if (profileEmailEl) {
+                profileEmailEl.textContent = displayEmail;
+                profileEmailEl.className = displayEmail === 'Not provided' ? 'info-value empty' : 'info-value';
+            }
+            
+            const profilePhoneEl = document.getElementById('profile-phone');
+            if (profilePhoneEl) {
+                profilePhoneEl.textContent = displayPhone;
+                profilePhoneEl.className = displayPhone === 'Not provided' ? 'info-value empty' : 'info-value';
+            }
+            
+            const profileLocationEl = document.getElementById('profile-location');
+            if (profileLocationEl) {
+                profileLocationEl.textContent = displayLocation;
+                profileLocationEl.className = displayLocation === 'Not provided' ? 'info-value empty' : 'info-value';
+            }
+
+            // Update education
+            if (educationEntries.length > 0) {
+                const educationHTML = educationEntries.map(edu => `
+                    <div class="work-item">
+                        <div class="work-title">${edu.degree} ${edu.field ? `in ${edu.field}` : ''}</div>
+                        <div class="work-company">${edu.school}</div>
+                        <div class="work-duration">${edu.startDate && edu.endDate ? `${new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}` : ''} ${edu.gpa ? `• GPA: ${edu.gpa}` : ''}</div>
+                        ${edu.description ? `<div class="work-description">${edu.description}</div>` : ''}
+                    </div>
+                `).join('');
+                
+                document.getElementById('education-overview').innerHTML = educationHTML;
+            } else {
+                document.getElementById('education-overview').innerHTML = '<p style="color: #86868b; font-style: italic;">No education information added yet</p>';
+            }
+
+            // Update work experience
+            if (workEntries.length > 0) {
+                const workHTML = workEntries.map(work => `
+                    <div class="work-item">
+                        <div class="work-title">${work.title}</div>
+                        <div class="work-company">${work.company}</div>
+                        <div class="work-duration">
+                            ${work.startDate ? new Date(work.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''} - 
+                            ${work.endDate ? new Date(work.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : 'Present'}
+                            ${work.type ? ` • ${work.type}` : ''}
+                        </div>
+                        ${work.responsibilities ? `<div class="work-description"><strong>Responsibilities:</strong> ${work.responsibilities}</div>` : ''}
+                    </div>
+                `).join('');
+                
+                document.getElementById('work-overview').innerHTML = workHTML;
+            } else {
+                document.getElementById('work-overview').innerHTML = '<p style="color: #86868b; font-style: italic;">No work experience added yet</p>';
+            }
+
+            // Update skills
+            if (userSkills.length > 0) {
+                const skillsHTML = userSkills.map(skill => `
+                    <div class="skill-tag" style="background: #f0f0f0; color: #1d1d1f; border: 1px solid #d2d2d7;">
+                        <span>${skill}</span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('skills-overview').innerHTML = `
+                    <div class="skills-display">${skillsHTML}</div>
+                `;
+            } else {
+                document.getElementById('skills-overview').innerHTML = '<p style="color: #86868b; font-style: italic;">No skills added yet</p>';
+            }
+
+            // Update documents
+            if (userDocuments.length > 0) {
+                const documentList = userDocuments.map(doc => `
+                    <div class="document-tag">
+                        <span>${getDocumentIcon(doc.type)} ${doc.name}</span>
+                        <small>(${doc.category})</small>
+                    </div>
+                `).join('');
+                document.getElementById('documents-overview').innerHTML = `
+                    <div class="documents-list">${documentList}</div>
+                `;
+            } else {
+                document.getElementById('documents-overview').innerHTML = '<p style="color: #86868b; font-style: italic;">No documents uploaded yet</p>';
+            }
+
+            // Update preferences - Step 4: My Information
+            // Try to get values from form fields first
+            let workAuth = document.getElementById('workAuthorization')?.value || '';
+            let preferredLocations = document.getElementById('preferredLocations')?.value || '';
+            let workTypePreference = document.getElementById('workTypePreference')?.value || '';
+            let willingnessToRelocate = document.getElementById('willingnessToRelocate')?.value || '';
+            let availabilityDate = document.getElementById('availabilityDate')?.value || '';
+            let expectedSalary = document.getElementById('expectedSalary')?.value || '';
+            
+            // Step 5: EEO Information
+            let gender = document.getElementById('gender')?.value || '';
+            let raceEthnicity = document.getElementById('raceEthnicity')?.value || '';
+            let veteranStatus = document.getElementById('veteranStatus')?.value || '';
+            let disabilityStatus = document.getElementById('disabilityStatus')?.value || '';
+            
+            // Also try to get from global userData if available (from Firebase)
+            if (typeof userData !== 'undefined' && userData) {
+                // Use form values if available, otherwise use Firebase data
+                if (!workAuth && userData.myInformation?.workAuthorization) {
+                    workAuth = userData.myInformation.workAuthorization;
+                }
+                if (!preferredLocations && userData.myInformation?.preferredLocations) {
+                    preferredLocations = userData.myInformation.preferredLocations;
+                }
+                if (!workTypePreference && userData.myInformation?.workTypePreference) {
+                    workTypePreference = userData.myInformation.workTypePreference;
+                }
+                if (!willingnessToRelocate && userData.myInformation?.willingnessToRelocate) {
+                    willingnessToRelocate = userData.myInformation.willingnessToRelocate;
+                }
+                if (!availabilityDate && userData.myInformation?.availabilityDate) {
+                    availabilityDate = userData.myInformation.availabilityDate;
+                }
+                if (!expectedSalary && userData.myInformation?.expectedSalary) {
+                    expectedSalary = userData.myInformation.expectedSalary;
+                }
+                if (!gender && userData.eeoInfo?.gender) {
+                    gender = userData.eeoInfo.gender;
+                }
+                if (!raceEthnicity && userData.eeoInfo?.raceEthnicity) {
+                    raceEthnicity = userData.eeoInfo.raceEthnicity;
+                }
+                if (!veteranStatus && userData.eeoInfo?.veteranStatus) {
+                    veteranStatus = userData.eeoInfo.veteranStatus;
+                }
+                if (!disabilityStatus && userData.eeoInfo?.disabilityStatus) {
+                    disabilityStatus = userData.eeoInfo.disabilityStatus;
+                }
+                
+                // Fallback to old preferences structure
+                if (!workAuth && userData.preferences?.workAuth) {
+                    workAuth = userData.preferences.workAuth;
+                }
+                if (!preferredLocations && userData.preferences?.locationPreference) {
+                    preferredLocations = userData.preferences.locationPreference;
+                }
+                if (!workTypePreference && userData.preferences?.workArrangement) {
+                    workTypePreference = userData.preferences.workArrangement;
+                }
+                if (!willingnessToRelocate && userData.preferences?.relocation) {
+                    willingnessToRelocate = userData.preferences.relocation;
+                }
+                if (!availabilityDate && userData.preferences?.startDate) {
+                    availabilityDate = userData.preferences.startDate;
+                }
+                if (!expectedSalary && userData.preferences?.salaryExpectation) {
+                    expectedSalary = userData.preferences.salaryExpectation;
+                }
+                if (!gender && userData.preferences?.gender) {
+                    gender = userData.preferences.gender;
+                }
+                if (!raceEthnicity && userData.preferences?.race) {
+                    raceEthnicity = userData.preferences.race;
+                }
+                if (!veteranStatus && userData.preferences?.veteranStatus) {
+                    veteranStatus = userData.preferences.veteranStatus;
+                }
+                if (!disabilityStatus && userData.preferences?.disabilityStatus) {
+                    disabilityStatus = userData.preferences.disabilityStatus;
+                }
+            }
+
+            // Format values for display
+            const formatValue = (value) => {
+                if (!value) return '';
+                return value.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            };
+
+            const hasPreferences = workAuth || preferredLocations || workTypePreference || willingnessToRelocate || availabilityDate || expectedSalary || gender || raceEthnicity || veteranStatus || disabilityStatus;
+
+            if (hasPreferences) {
+                let preferencesHTML = '<div class="preferences-grid">';
+                
+                if (workAuth) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Work Authorization</div>
+                            <div class="preference-value">${formatValue(workAuth)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (preferredLocations) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Preferred Locations</div>
+                            <div class="preference-value">${preferredLocations}</div>
+                        </div>
+                    `;
+                }
+                
+                if (workTypePreference) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Work Type Preference</div>
+                            <div class="preference-value">${formatValue(workTypePreference)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (willingnessToRelocate) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Willingness to Relocate</div>
+                            <div class="preference-value">${formatValue(willingnessToRelocate)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (availabilityDate) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Availability Date</div>
+                            <div class="preference-value">${availabilityDate}</div>
+                        </div>
+                    `;
+                }
+                
+                if (expectedSalary) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Expected Salary</div>
+                            <div class="preference-value">${expectedSalary}</div>
+                        </div>
+                    `;
+                }
+                
+                if (gender) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Gender</div>
+                            <div class="preference-value">${formatValue(gender)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (raceEthnicity) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Race/Ethnicity</div>
+                            <div class="preference-value">${formatValue(raceEthnicity)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (veteranStatus) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Veteran Status</div>
+                            <div class="preference-value">${formatValue(veteranStatus)}</div>
+                        </div>
+                    `;
+                }
+                
+                if (disabilityStatus) {
+                    preferencesHTML += `
+                        <div class="preference-item">
+                            <div class="preference-label">Disability Status</div>
+                            <div class="preference-value">${formatValue(disabilityStatus)}</div>
+                        </div>
+                    `;
+                }
+                
+                preferencesHTML += '</div>';
+                document.getElementById('preferences-overview').innerHTML = preferencesHTML;
+            } else {
+                document.getElementById('preferences-overview').innerHTML = '<p style="color: #86868b; font-style: italic;">No preferences set yet</p>';
+            }
+        }
+
+        // Global variable to store userData for access in updateProfileOverview
+        let userData = null;
+
+        // Skills management
+        let userSkills = [];
+
+        // Education management
+        let educationEntries = [];
+
+        // Work experience management
+        let workEntries = [];
+
+        // Documents management
+        let userDocuments = [];
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const container = document.getElementById('notification-container');
+            
+            // Remove existing notifications
+            container.innerHTML = '';
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const icon = type === 'success' ? '✅' : '❌';
+            
+            notification.innerHTML = `
+                <div class="notification-icon">${icon}</div>
+                <div class="notification-message">${message}</div>
+                <button class="notification-close" onclick="hideNotification(this)">×</button>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                hideNotification(notification.querySelector('.notification-close'));
+            }, 3000);
+        }
+
+        function hideNotification(closeBtn) {
+            const notification = closeBtn.closest('.notification');
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }
+
+        async function addEducation() {
+            const institutionEl = document.getElementById('edu-school');
+            const degreeEl = document.getElementById('edu-degree');
+            const majorEl = document.getElementById('edu-field');
+            const startDateEl = document.getElementById('edu-start-date');
+            const endDateEl = document.getElementById('edu-end-date');
+            const gpaEl = document.getElementById('edu-gpa');
+            const locationEl = document.getElementById('edu-location');
+            const honorsEl = document.getElementById('edu-description');
+            
+            const institution = (institutionEl?.value || '').trim();
+            const degree = (degreeEl?.value || '').trim();
+            const major = (majorEl?.value || '').trim();
+            const startDate = startDateEl?.value || '';
+            const endDate = endDateEl?.value || '';
+            const gpa = (gpaEl?.value || '').trim();
+            const location = (locationEl?.value || '').trim();
+            const honors = (honorsEl?.value || '').trim();
+
+            if (institution && degree) {
+                const education = {
+                    id: Date.now(),
+                    institution, // institution_{N}
+                    degree, // degree_{N}
+                    major, // major_{N}
+                    startDate, // startDate_{N}
+                    endDate, // endDate_{N}
+                    gpa, // gpa_{N}
+                    honors, // honors_{N}
+                    // Keep legacy fields for backward compatibility
+                    school: institution,
+                    field: major,
+                    description: honors,
+                    location,
+                    startYear: startDate ? new Date(startDate).getFullYear() : '',
+                    endYear: endDate ? new Date(endDate).getFullYear() : ''
+                };
+
+                educationEntries.push(education);
+                updateEducationDisplay();
+                clearEducationForm();
+                updateProfileOverview();
+                
+                // Save to Firebase
+                await saveEducationToFirebase();
+                
+                // Show success message
+                showNotification('Education entry added successfully!');
+                
+                // Show "Add Another Education" button
+                document.getElementById('add-another-education-btn').style.display = 'inline-block';
+            }
+        }
+
+        async function saveEducationToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                await setDoc(doc(db, 'users', user.uid), {
+                    education: educationEntries
+                }, { merge: true });
+
+            } catch (error) {
+                console.error('Error saving education to Firebase:', error);
+            }
+        }
+
+        async function removeEducation(educationId) {
+            educationEntries = educationEntries.filter(edu => edu.id !== educationId);
+            updateEducationDisplay();
+            updateProfileOverview();
+            
+            // Save to Firebase
+            await saveEducationToFirebase();
+            
+            // Show success message
+            showNotification('Education entry removed successfully!');
+        }
+
+        function updateEducationDisplay() {
+            const container = document.getElementById('education-entries');
+            
+            if (educationEntries.length === 0) {
+                container.innerHTML = '<div class="education-empty">No education entries added yet</div>';
+            } else {
+                const entriesHTML = educationEntries.map(edu => `
+                    <div class="education-entry">
+                        <div class="education-actions">
+                            <button class="education-action-btn" data-education-id="${edu.id}" title="Remove">🗑️</button>
+                        </div>
+                        <div class="education-header">
+                            <div>
+                                <div class="education-title">${edu.degree} ${edu.field ? `in ${edu.field}` : ''}</div>
+                                <div class="education-school">${edu.school}</div>
+                            </div>
+                        </div>
+                        <div class="education-details">
+                            ${edu.startDate && edu.endDate ? `
+                                <div class="education-detail">
+                                    <div class="education-detail-label">Duration</div>
+                                    <div class="education-detail-value">${new Date(edu.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })} - ${new Date(edu.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}</div>
+                                </div>
+                            ` : ''}
+                            ${edu.gpa ? `
+                                <div class="education-detail">
+                                    <div class="education-detail-label">GPA</div>
+                                    <div class="education-detail-value">${edu.gpa}</div>
+                                </div>
+                            ` : ''}
+                            ${edu.location ? `
+                                <div class="education-detail">
+                                    <div class="education-detail-label">Location</div>
+                                    <div class="education-detail-value">${edu.location}</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        ${edu.description ? `<div class="education-description">${edu.description}</div>` : ''}
+                    </div>
+                `).join('');
+                
+                container.innerHTML = entriesHTML;
+            }
+        }
+
+        function clearEducationForm() {
+            document.getElementById('edu-school').value = '';
+            document.getElementById('edu-degree').value = '';
+            document.getElementById('edu-field').value = '';
+            document.getElementById('edu-start-date').value = '';
+            document.getElementById('edu-end-date').value = '';
+            document.getElementById('edu-gpa').value = '';
+            document.getElementById('edu-location').value = '';
+            document.getElementById('edu-description').value = '';
+        }
+
+        function addAnotherEducation() {
+            clearEducationForm();
+            document.getElementById('add-another-education-btn').style.display = 'none';
+        }
+
+        async function addWorkExperience() {
+            const positionEl = document.getElementById('work-title');
+            const companyEl = document.getElementById('work-company');
+            const employmentTypeEl = document.getElementById('work-type');
+            const startDateEl = document.getElementById('work-start-date');
+            const endDateEl = document.getElementById('work-end-date');
+            const locationEl = document.getElementById('work-location');
+            const responsibilitiesEl = document.getElementById('work-responsibilities');
+            
+            const position = (positionEl?.value || '').trim();
+            const company = (companyEl?.value || '').trim();
+            const employmentType = (employmentTypeEl?.value || '').trim();
+            const startDate = startDateEl?.value || '';
+            const endDate = endDateEl?.value || '';
+            const location = (locationEl?.value || '').trim();
+            const responsibilities = (responsibilitiesEl?.value || '').trim();
+
+            if (position && company) {
+                const work = {
+                    id: Date.now(),
+                    position, // position_{N}
+                    company, // company_{N}
+                    startDate, // startDate_{N}
+                    endDate, // endDate_{N}
+                    employmentType, // employmentType_{N}
+                    responsibilities, // responsibilities_{N}
+                    // Keep legacy fields for backward compatibility
+                    title: position,
+                    type: employmentType,
+                    location
+                };
+
+                workEntries.push(work);
+                updateWorkDisplay();
+                clearWorkForm();
+                updateProfileOverview();
+                
+                // Save to Firebase
+                await saveWorkExperienceToFirebase();
+                
+                // Show success message
+                showNotification('Work experience added successfully!');
+                
+                // Show "Add Another Experience" button
+                document.getElementById('add-another-work-btn').style.display = 'inline-block';
+            }
+        }
+
+        async function saveWorkExperienceToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                await setDoc(doc(db, 'users', user.uid), {
+                    workExperience: workEntries
+                }, { merge: true });
+
+            } catch (error) {
+                console.error('Error saving work experience to Firebase:', error);
+            }
+        }
+
+        // Document management functions
+        async function uploadDocuments() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                // Step 1: Document Upload - using correct field IDs
+                const resumeFile = document.getElementById('resumeFile')?.files[0];
+                const coverLetterFile = document.getElementById('coverLetterFile')?.files[0];
+                const certificatesFiles = document.getElementById('certificates-upload').files;
+                const otherDocsFiles = document.getElementById('other-docs-upload').files;
+
+                const uploadPromises = [];
+
+                if (resumeFile) {
+                    uploadPromises.push(uploadDocument(resumeFile, 'resume'));
+                }
+                if (coverLetterFile) {
+                    uploadPromises.push(uploadDocument(coverLetterFile, 'cover-letter'));
+                }
+                if (certificatesFiles.length > 0) {
+                    for (let file of certificatesFiles) {
+                        uploadPromises.push(uploadDocument(file, 'certificate'));
+                    }
+                }
+                if (otherDocsFiles.length > 0) {
+                    for (let file of otherDocsFiles) {
+                        uploadPromises.push(uploadDocument(file, 'other'));
+                    }
+                }
+
+                if (uploadPromises.length > 0) {
+                    await Promise.all(uploadPromises);
+                    await saveDocumentsToFirebase();
+                    updateDocumentsDisplay();
+                    updateProfileOverview();
+                    
+                    // Clear form
+                    if (document.getElementById('resumeFile')) document.getElementById('resumeFile').value = '';
+                    if (document.getElementById('coverLetterFile')) document.getElementById('coverLetterFile').value = '';
+                    if (document.getElementById('certificates-upload')) document.getElementById('certificates-upload').value = '';
+                    if (document.getElementById('other-docs-upload')) document.getElementById('other-docs-upload').value = '';
+                    
+                    // Show success message
+                    showNotification('Documents uploaded successfully!');
+                }
+
+            } catch (error) {
+                console.error('Error uploading documents:', error);
+            }
+        }
+
+        async function uploadDocument(file, category) {
+            try {
+                const user = auth.currentUser;
+                const storageRef = ref(storage, `documents/${user.uid}/${category}/${file.name}`);
+                const snapshot = await uploadBytes(storageRef, file);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                const document = {
+                    id: Date.now() + Math.random(),
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    category: category,
+                    url: downloadURL,
+                    uploadDate: new Date().toISOString()
+                };
+
+                userDocuments.push(document);
+                return document;
+
+            } catch (error) {
+                console.error('Error uploading document:', error);
+                throw error;
+            }
+        }
+
+        function removeDocument(documentId) {
+            userDocuments = userDocuments.filter(doc => doc.id != documentId);
+            updateDocumentsDisplay();
+            updateProfileOverview();
+            saveDocumentsToFirebase();
+            
+            // Show success message
+            showNotification('Document removed successfully!');
+        }
+
+        function updateDocumentsDisplay() {
+            const container = document.getElementById('documents-list');
+            if (userDocuments.length === 0) {
+                container.innerHTML = '<div class="documents-empty">No documents uploaded yet</div>';
+            } else {
+                const documentsHTML = userDocuments.map(doc => `
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="document-icon">${getDocumentIcon(doc.type)}</div>
+                            <div class="document-details">
+                                <div class="document-name">${doc.name}</div>
+                                <div class="document-type">${doc.category} • ${formatFileSize(doc.size)}</div>
+                            </div>
+                        </div>
+                        <div class="document-actions">
+                            <button class="document-action-btn document-preview-btn" data-document-url="${doc.url}" title="Preview">👁️</button>
+                            <button class="document-action-btn document-delete-btn" data-document-id="${doc.id}" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+                container.innerHTML = documentsHTML;
+            }
+        }
+
+        function getDocumentIcon(fileType) {
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('word') || fileType.includes('document')) return '📝';
+            if (fileType.includes('image')) return '🖼️';
+            return '📎';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function previewDocument(url) {
+            window.open(url, '_blank');
+        }
+
+        async function saveDocumentsToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                await setDoc(doc(db, 'users', user.uid), {
+                    documents: userDocuments
+                }, { merge: true });
+
+            } catch (error) {
+                console.error('Error saving documents to Firebase:', error);
+            }
+        }
+
+        async function removeWorkExperience(workId) {
+            workEntries = workEntries.filter(work => work.id !== workId);
+            updateWorkDisplay();
+            updateProfileOverview();
+            
+            // Save to Firebase
+            await saveWorkExperienceToFirebase();
+            
+            // Show success message
+            showNotification('Work experience removed successfully!');
+        }
+
+        function updateWorkDisplay() {
+            const container = document.getElementById('work-entries');
+            
+            if (workEntries.length === 0) {
+                container.innerHTML = '<div class="work-empty">No work experience added yet</div>';
+            } else {
+                const entriesHTML = workEntries.map(work => `
+                    <div class="work-entry">
+                        <div class="work-actions">
+                            <button class="work-action-btn" data-work-id="${work.id}" title="Remove">🗑️</button>
+                        </div>
+                        <div class="work-header">
+                            <div>
+                                <div class="work-title">${work.title}</div>
+                                <div class="work-company">${work.company}</div>
+                                <div class="work-duration">
+                                    ${work.startDate ? new Date(work.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : ''} - 
+                                    ${work.endDate ? new Date(work.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : 'Present'}
+                                    ${work.type ? ` • ${work.type}` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="work-details">
+                            ${work.location ? `
+                                <div class="work-detail">
+                                    <div class="work-detail-label">Location</div>
+                                    <div class="work-detail-value">${work.location}</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        ${work.responsibilities ? `
+                            <div class="work-section">
+                                <div class="work-section-title">Key Responsibilities</div>
+                                <div class="work-section-content">${work.responsibilities}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+                
+                container.innerHTML = entriesHTML;
+            }
+        }
+
+        function clearWorkForm() {
+            document.getElementById('work-title').value = '';
+            document.getElementById('work-company').value = '';
+            document.getElementById('work-type').value = '';
+            document.getElementById('work-start-date').value = '';
+            document.getElementById('work-end-date').value = '';
+            document.getElementById('work-location').value = '';
+            document.getElementById('work-responsibilities').value = '';
+        }
+
+        function addAnotherWork() {
+            clearWorkForm();
+            document.getElementById('add-another-work-btn').style.display = 'none';
+        }
+
+        async function addSkill() {
+            const skillInput = document.getElementById('skill-input');
+            if (!skillInput) return;
+            const skillText = (skillInput.value || '').trim();
+            
+            if (skillText) {
+                // Split by comma and clean each skill
+                const skills = skillText.split(',').map(skill => skill.trim()).filter(skill => skill.length > 0);
+                
+                // Add each skill to the array
+                skills.forEach(skill => {
+                    if (!userSkills.includes(skill)) {
+                        userSkills.push(skill);
+                    }
+                });
+                
+                // Clear input
+                skillInput.value = '';
+                
+                // Update display
+                updateSkillsDisplay();
+                updateProfileOverview();
+                
+                // Save to Firebase
+                await saveSkillsToFirebase();
+                
+                // Show success message
+                showNotification('Skills added successfully!');
+            }
+        }
+
+        async function saveSkillsToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    console.error('No user logged in - cannot save skills');
+                    return false;
+                }
+
+                // Get skills from userSkills array (which is populated when user clicks Add)
+                if (userSkills.length === 0) {
+                    console.log('No skills to save - userSkills array is empty');
+                    return false;
+                }
+
+                // Create skills text from array
+                const skillsText = userSkills.join(', ');
+
+                // Prepare data to save
+                const dataToSave = {
+                    skills: userSkills,
+                    skillsText: skillsText,
+                    skillsUpdatedAt: new Date().toISOString()
+                };
+
+                console.log('Saving skills to Firebase:', dataToSave);
+                
+                await setDoc(doc(db, 'users', user.uid), dataToSave, { merge: true });
+
+                console.log('Skills saved successfully to Firebase');
+                return true;
+
+            } catch (error) {
+                console.error('Error saving skills to Firebase:', error);
+                console.error('Error stack:', error.stack);
+                showNotification('Error saving skills. Please try again.');
+                return false;
+            }
+        }
+
+        async function savePreferencesToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    console.error('No user logged in - cannot save preferences');
+                    return false;
+                }
+
+                // Step 4: My Information
+                const workAuthorizationEl = document.getElementById('workAuthorization');
+                const preferredLocationsEl = document.getElementById('preferredLocations');
+                const workTypePreferenceEl = document.getElementById('workTypePreference');
+                const willingnessToRelocateEl = document.getElementById('willingnessToRelocate');
+                const availabilityDateEl = document.getElementById('availabilityDate');
+                const expectedSalaryEl = document.getElementById('expectedSalary');
+                
+                const myInformation = {
+                    workAuthorization: workAuthorizationEl?.value?.trim() || '',
+                    preferredLocations: preferredLocationsEl?.value?.trim() || '',
+                    workTypePreference: workTypePreferenceEl?.value?.trim() || '',
+                    willingnessToRelocate: willingnessToRelocateEl?.value?.trim() || '',
+                    availabilityDate: availabilityDateEl?.value?.trim() || '',
+                    expectedSalary: expectedSalaryEl?.value?.trim() || ''
+                };
+
+                // Step 5: EEO Information
+                const genderEl = document.getElementById('gender');
+                const raceEthnicityEl = document.getElementById('raceEthnicity');
+                const veteranStatusEl = document.getElementById('veteranStatus');
+                const disabilityStatusEl = document.getElementById('disabilityStatus');
+                
+                const eeoInfo = {
+                    gender: genderEl?.value?.trim() || '',
+                    raceEthnicity: raceEthnicityEl?.value?.trim() || '',
+                    veteranStatus: veteranStatusEl?.value?.trim() || '',
+                    disabilityStatus: disabilityStatusEl?.value?.trim() || ''
+                };
+
+                // Combine all preferences
+                const preferences = {
+                    ...myInformation,
+                    ...eeoInfo
+                };
+
+                // Update placeholders with saved values (always show saved value in placeholder)
+                if (preferredLocationsEl) {
+                    if (myInformation.preferredLocations) {
+                        // Always show saved value in placeholder, even if field has a value
+                        preferredLocationsEl.placeholder = `Saved: ${myInformation.preferredLocations}`;
+                        preferredLocationsEl.setAttribute('data-saved', myInformation.preferredLocations);
+                    } else {
+                        // Clear saved indicator if no value
+                        preferredLocationsEl.placeholder = 'e.g., New York, San Francisco, Remote';
+                        preferredLocationsEl.removeAttribute('data-saved');
+                    }
+                }
+                if (availabilityDateEl) {
+                    if (myInformation.availabilityDate) {
+                        // Always show saved value in placeholder, even if field has a value
+                        availabilityDateEl.placeholder = `Saved: ${myInformation.availabilityDate}`;
+                        availabilityDateEl.setAttribute('data-saved', myInformation.availabilityDate);
+                    } else {
+                        // Clear saved indicator if no value
+                        availabilityDateEl.placeholder = 'MM/DD/YYYY or YYYY-MM-DD';
+                        availabilityDateEl.removeAttribute('data-saved');
+                    }
+                }
+                if (expectedSalaryEl) {
+                    if (myInformation.expectedSalary) {
+                        // Always show saved value in placeholder, even if field has a value
+                        expectedSalaryEl.placeholder = `Saved: ${myInformation.expectedSalary}`;
+                        expectedSalaryEl.setAttribute('data-saved', myInformation.expectedSalary);
+                    } else {
+                        // Clear saved indicator if no value
+                        expectedSalaryEl.placeholder = 'e.g., $80,000 - $100,000';
+                        expectedSalaryEl.removeAttribute('data-saved');
+                    }
+                }
+
+                // Always save (even if empty, to allow clearing values)
+                await setDoc(doc(db, 'users', user.uid), {
+                    myInformation: myInformation,
+                    eeoInfo: eeoInfo,
+                    preferences: preferences,
+                    preferencesUpdatedAt: new Date().toISOString()
+                }, { merge: true });
+                
+                console.log('Preferences saved to Firebase:', { myInformation, eeoInfo });
+                
+                // Show success message
+                showNotification('Preferences saved successfully!');
+                return true;
+
+            } catch (error) {
+                console.error('Error saving preferences to Firebase:', error);
+                showNotification('Error saving preferences. Please try again.');
+                return false;
+            }
+        }
+
+        async function savePersonalInfoToFirebase() {
+            try {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                // Step 1: Contact Information
+                const contactInfo = {
+                    firstName: document.getElementById('firstName')?.value?.trim() || '',
+                    lastName: document.getElementById('lastName')?.value?.trim() || '',
+                    email: document.getElementById('email')?.value?.trim() || '',
+                    phone: document.getElementById('phone')?.value?.trim() || '',
+                    address: document.getElementById('address')?.value?.trim() || '',
+                    linkedin: document.getElementById('linkedin')?.value?.trim() || '',
+                    portfolio: document.getElementById('portfolio')?.value?.trim() || ''
+                };
+
+                // Only save if there's actual user input (not empty or default values)
+                const hasValidData = Object.values(contactInfo).some(value => 
+                    value && value !== '' && value !== 'testing' && value !== 'test'
+                );
+
+                if (hasValidData) {
+                    await setDoc(doc(db, 'users', user.uid), {
+                        contactInfo: contactInfo
+                    }, { merge: true });
+                    
+                    // Show success message
+                    showNotification('Contact information saved successfully!');
+                } else {
+                    console.log('No valid contact information to save');
+                }
+
+            } catch (error) {
+                console.error('Error saving contact info to Firebase:', error);
+            }
+        }
+
+        async function removeSkill(skillToRemove) {
+            userSkills = userSkills.filter(skill => skill !== skillToRemove);
+            
+            // Update display using the new tags display function
+            if (typeof updateSkillsTagsDisplay === 'function') {
+                updateSkillsTagsDisplay();
+            }
+            updateSkillsDisplay();
+            updateProfileOverview();
+            
+            // Save to Firebase
+            const saved = await saveSkillsToFirebase();
+            
+            if (saved) {
+                showNotification('Skill removed successfully!');
+            }
+        }
+
+        function updateSkillsDisplay() {
+            // This function is kept for backward compatibility but now uses updateSkillsTagsDisplay
+            if (typeof updateSkillsTagsDisplay === 'function') {
+                updateSkillsTagsDisplay();
+            }
+            
+            // Also update the old container if it exists (for backward compatibility)
+            const skillsContainer = document.getElementById('skills-container');
+            if (skillsContainer) {
+                const skillsTextarea = document.getElementById('skills');
+                if (skillsTextarea && skillsTextarea.value) {
+                    const skillsText = (skillsTextarea.value || '').trim();
+                    const skillsArray = skillsText ? skillsText.split(',').map(skill => skill.trim()).filter(skill => skill.length > 0) : [];
+                    
+                    if (skillsArray.length > 0) {
+                        const skillsHTML = skillsArray.map(skill => `
+                            <div class="skill-tag">
+                                <span>${skill}</span>
+                            </div>
+                        `).join('');
+                        skillsContainer.innerHTML = `<div class="skills-display">${skillsHTML}</div>`;
+                    } else {
+                        skillsContainer.innerHTML = '<p class="skills-empty">No skills added yet</p>';
+                    }
+                } else if (userSkills.length > 0) {
+                    const skillsHTML = userSkills.map(skill => `
+                        <div class="skill-tag">
+                            <span>${skill}</span>
+                        </div>
+                    `).join('');
+                    skillsContainer.innerHTML = `<div class="skills-display">${skillsHTML}</div>`;
+                } else {
+                    skillsContainer.innerHTML = '<p class="skills-empty">No skills added yet</p>';
+                }
+            }
+        }
+
+        // Add event listeners to form inputs to update overview in real-time
+        document.addEventListener('DOMContentLoaded', function() {
+            // Education management
+            const saveEducationBtn = document.getElementById('save-education-btn');
+            if (saveEducationBtn) {
+                saveEducationBtn.addEventListener('click', addEducation);
+            }
+            const addAnotherEducationBtn = document.getElementById('add-another-education-btn');
+            if (addAnotherEducationBtn) {
+                addAnotherEducationBtn.addEventListener('click', addAnotherEducation);
+            }
+
+            // Work experience management
+            const saveWorkBtn = document.getElementById('save-work-btn');
+            if (saveWorkBtn) {
+                saveWorkBtn.addEventListener('click', addWorkExperience);
+            }
+            const addAnotherWorkBtn = document.getElementById('add-another-work-btn');
+            if (addAnotherWorkBtn) {
+                addAnotherWorkBtn.addEventListener('click', addAnotherWork);
+            }
+
+            // Skills management - new input field with Add button
+            const addSkillsBtn = document.getElementById('add-skills-btn');
+            if (addSkillsBtn) {
+                addSkillsBtn.addEventListener('click', async function() {
+                    await addSkillsFromInput();
+                });
+            }
+            
+            const skillsInput = document.getElementById('skills-input');
+            if (skillsInput) {
+                // Allow Enter key to add skills
+                skillsInput.addEventListener('keypress', async function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        await addSkillsFromInput();
+                    }
+                });
+            }
+            
+            // Function to update skills tags display from userSkills array
+            function updateSkillsTagsDisplay() {
+                const tagsDisplay = document.getElementById('skills-tags-display');
+                
+                if (!tagsDisplay) return;
+                
+                if (userSkills.length > 0) {
+                    tagsDisplay.classList.remove('empty');
+                    const skillsHTML = userSkills.map(skill => {
+                        // Escape HTML and check if skill needs truncation
+                        const escapedSkill = skill.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        const displayText = skill.length > 25 ? skill.substring(0, 25) + '...' : skill;
+                        return `
+                            <div class="skill-tag">
+                                <span class="skill-name">${displayText}</span>
+                                ${skill.length > 25 ? `<div class="skill-tooltip">${escapedSkill}</div>` : ''}
+                                <button class="remove-skill" data-skill="${escapedSkill.replace(/"/g, '&quot;')}" title="Remove ${escapedSkill}">×</button>
+                            </div>
+                        `;
+                    }).join('');
+                    tagsDisplay.innerHTML = skillsHTML;
+                    
+                    // Add event listeners to remove buttons
+                    const removeButtons = tagsDisplay.querySelectorAll('.remove-skill');
+                    removeButtons.forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const skillToRemove = this.getAttribute('data-skill');
+                            removeSkill(skillToRemove);
+                        });
+                    });
+                } else {
+                    tagsDisplay.classList.add('empty');
+                    tagsDisplay.innerHTML = '<span class="skills-empty-hint">Your skills will appear here...</span>';
+                }
+            }
+            
+            // Function to add skills from input
+            async function addSkillsFromInput() {
+                const skillsInput = document.getElementById('skills-input');
+                if (!skillsInput) return;
+                
+                const inputValue = (skillsInput.value || '').trim();
+                if (!inputValue) {
+                    showNotification('Please enter skills to add');
+                    return;
+                }
+                
+                // Parse skills from comma-separated text
+                const newSkills = inputValue.split(',').map(skill => skill.trim()).filter(skill => skill.length > 0);
+                
+                if (newSkills.length === 0) {
+                    showNotification('Please enter valid skills');
+                    return;
+                }
+                
+                // Add each new skill (avoid duplicates)
+                let addedCount = 0;
+                newSkills.forEach(skill => {
+                    if (!userSkills.includes(skill)) {
+                        userSkills.push(skill);
+                        addedCount++;
+                    }
+                });
+                
+                // Clear input
+                skillsInput.value = '';
+                
+                // Update display
+                updateSkillsTagsDisplay();
+                updateProfileOverview();
+                
+                // Save to Firebase
+                const saved = await saveSkillsToFirebase();
+                
+                if (saved) {
+                    if (addedCount > 0) {
+                        showNotification(`Successfully added ${addedCount} skill${addedCount > 1 ? 's' : ''}!`);
+                    } else {
+                        showNotification('Skills already exist');
+                    }
+                }
+            }
+            
+            // Make function globally accessible
+            window.updateSkillsTagsDisplay = updateSkillsTagsDisplay;
+            window.addSkillsFromInput = addSkillsFromInput;
+            
+            // Initialize skills tags display on load
+            updateSkillsTagsDisplay();
+
+            // Documents management
+            const uploadDocumentsBtn = document.getElementById('upload-documents-btn');
+            if (uploadDocumentsBtn) {
+                uploadDocumentsBtn.addEventListener('click', uploadDocuments);
+            }
+
+            // Event delegation for delete buttons
+            document.addEventListener('click', function(e) {
+                // Education delete
+                if (e.target.classList.contains('education-action-btn')) {
+                    const educationId = parseInt(e.target.getAttribute('data-education-id'));
+                    if (educationId) {
+                        removeEducation(educationId);
+                    }
+                }
+                
+                // Work experience delete
+                if (e.target.classList.contains('work-action-btn')) {
+                    const workId = parseInt(e.target.getAttribute('data-work-id'));
+                    if (workId) {
+                        removeWorkExperience(workId);
+                    }
+                }
+                
+                // Document preview
+                if (e.target.classList.contains('document-preview-btn')) {
+                    const documentUrl = e.target.getAttribute('data-document-url');
+                    if (documentUrl) {
+                        previewDocument(documentUrl);
+                    }
+                }
+                
+                // Document delete
+                if (e.target.classList.contains('document-delete-btn')) {
+                    const documentId = e.target.getAttribute('data-document-id');
+                    if (documentId) {
+                        removeDocument(documentId);
+                    }
+                }
+            });
+
+            // Listen for changes in personal info with debounce
+            const personalInfoInputs = document.querySelectorAll('#personal-info input');
+            let personalInfoTimeout;
+            personalInfoInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    updateProfileOverview();
+                    clearTimeout(personalInfoTimeout);
+                    personalInfoTimeout = setTimeout(async () => {
+                        await savePersonalInfoToFirebase();
+                    }, 1000); // Wait 1 second after user stops typing
+                });
+            });
+            
+            // Save button for contact information
+            const saveContactBtn = document.querySelector('#personal-info .save-section-btn');
+            if (saveContactBtn) {
+                saveContactBtn.addEventListener('click', async function() {
+                    await savePersonalInfoToFirebase();
+                });
+            }
+
+            // Listen for changes in education
+            const educationInputs = document.querySelectorAll('#education input');
+            educationInputs.forEach(input => {
+                input.addEventListener('input', updateProfileOverview);
+            });
+
+            // Listen for changes in work experience
+            const workInputs = document.querySelectorAll('#work-experience input, #work-experience textarea');
+            workInputs.forEach(input => {
+                input.addEventListener('input', updateProfileOverview);
+            });
+
+            // Listen for file uploads
+            const documentInputs = document.querySelectorAll('#documents input[type="file"]');
+            documentInputs.forEach(input => {
+                input.addEventListener('change', updateProfileOverview);
+            });
+
+            // Save button handlers for preferences
+            const saveMyInfoBtn = document.getElementById('save-my-info-btn');
+            if (saveMyInfoBtn) {
+                saveMyInfoBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const saved = await savePreferencesToFirebase();
+                    if (saved) {
+                        showNotification('My Information saved successfully!');
+                    }
+                });
+            }
+            
+            const saveEeoBtn = document.getElementById('save-eeo-btn');
+            if (saveEeoBtn) {
+                saveEeoBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const saved = await savePreferencesToFirebase();
+                    if (saved) {
+                        showNotification('EEO Information saved successfully!');
+                    }
+                });
+            }
+            
+            // Listen for changes in preferences with debounce
+            const preferenceInputs = document.querySelectorAll('#preferences input, #preferences select');
+            let preferencesTimeout;
+            preferenceInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    updateProfileOverview();
+                    clearTimeout(preferencesTimeout);
+                    preferencesTimeout = setTimeout(async () => {
+                        await savePreferencesToFirebase();
+                    }, 1000); // Wait 1 second after user stops typing
+                });
+                input.addEventListener('input', function() {
+                    updateProfileOverview();
+                    clearTimeout(preferencesTimeout);
+                    preferencesTimeout = setTimeout(async () => {
+                        await savePreferencesToFirebase();
+                    }, 1000); // Wait 1 second after user stops typing
+                });
+            });
+        });
+    </script>
+</body>
+</html>
